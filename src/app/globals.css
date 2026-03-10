@@ -1,0 +1,130 @@
+@import "tailwindcss";
+
+html {
+  scroll-behavior: smooth;
+}
+
+:root {
+  --background: #F9FAFB;
+  --foreground: #111827;
+}
+
+@theme inline {
+  --color-background: #F9FAFB;
+  --color-foreground: #111827;
+  --color-primary: #1E40AF;
+  --color-accent: #F97316;
+  --color-danger: #DC2626;
+  --color-neutral: #111827;
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  @keyframes fade-in-up {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes blob {
+    0% { transform: translate(0px, 0px) scale(1); }
+    33% { transform: translate(30px, -50px) scale(1.1); }
+    66% { transform: translate(-20px, 20px) scale(0.9); }
+    100% { transform: translate(0px, 0px) scale(1); }
+  }
+  @keyframes blob-slow {
+    0% { transform: translate(0px, 0px) scale(1) rotate(0deg); }
+    25% { transform: translate(40px, -60px) scale(1.05) rotate(90deg); }
+    50% { transform: translate(-30px, 40px) scale(0.95) rotate(180deg); }
+    75% { transform: translate(20px, -30px) scale(1.02) rotate(270deg); }
+    100% { transform: translate(0px, 0px) scale(1) rotate(360deg); }
+  }
+  @keyframes scan {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+  }
+  @keyframes scan-line {
+    0% { transform: translateY(-100vh); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(100vh); opacity: 0; }
+  }
+  @keyframes float {
+    0% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(180deg); }
+    100% { transform: translateY(0px) rotate(360deg); }
+  }
+  @keyframes float-delayed {
+    0% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-15px) rotate(-180deg); }
+    100% { transform: translateY(0px) rotate(-360deg); }
+  }
+  @keyframes float-slow {
+    0% { transform: translateY(0px) translateX(0px); }
+    33% { transform: translateY(-10px) translateX(5px); }
+    66% { transform: translateY(5px) translateX(-3px); }
+    100% { transform: translateY(0px) translateX(0px); }
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0; transform: scale(0.8) rotate(0deg); }
+    50% { opacity: 1; transform: scale(1.2) rotate(180deg); }
+  }
+  @keyframes twinkle-delayed {
+    0%, 100% { opacity: 0; transform: scale(0.8) rotate(0deg); }
+    50% { opacity: 1; transform: scale(1.2) rotate(-180deg); }
+  }
+  @keyframes draw-path {
+    0% { stroke-dashoffset: 1000; opacity: 0; }
+    10% { opacity: 0.3; }
+    100% { stroke-dashoffset: 0; opacity: 0.3; }
+  }
+  @keyframes draw-path-delayed {
+    0% { stroke-dashoffset: 800; opacity: 0; }
+    10% { opacity: 0.3; }
+    100% { stroke-dashoffset: 0; opacity: 0.3; }
+  }
+  @keyframes gradient-shift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  --animate-fade-in-up: fade-in-up 0.8s ease-out forwards;
+  --animate-blob: blob 7s infinite;
+  --animate-blob-slow: blob-slow 15s infinite;
+  --animate-scan: scan 3s linear infinite;
+  --animate-scan-line: scan-line 4s linear infinite;
+  --animate-scan-line-delayed: scan-line 4s linear infinite 2s;
+  --animate-float: float 3s ease-in-out infinite;
+  --animate-float-delayed: float-delayed 3s ease-in-out infinite 1s;
+  --animate-float-slow: float-slow 4s ease-in-out infinite;
+  --animate-twinkle: twinkle 2s ease-in-out infinite;
+  --animate-twinkle-delayed: twinkle-delayed 2s ease-in-out infinite 1s;
+  --animate-draw-path: draw-path 3s ease-out forwards;
+  --animate-draw-path-delayed: draw-path-delayed 3s ease-out forwards 1s;
+  --animate-gradient-shift: gradient-shift 3s ease-in-out infinite;
+}
+
+/* Scroll Reveal Animations */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.scroll-reveal.reveal {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: #F9FAFB;
+  color: #111827;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  color: #171717;
+  font-family: Arial, Helvetica, sans-serif;
+  scroll-behavior: smooth;
+}
