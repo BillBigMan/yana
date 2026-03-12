@@ -1,4 +1,44 @@
+# Robots.txt pour Y'ana - Plateforme de mise en relation domestique
+
 User-agent: *
 Allow: /
 
-Sitemap: https://yana.cm/sitemap.xml
+# Priorité pour les pages importantes
+Allow: /$
+Allow: /?lang=fr
+Allow: /?lang=en
+Allow: /#solution
+Allow: /#how-it-works
+Allow: /#waitlist
+Allow: /#faq
+
+# Bloquer les pages de développement/admin
+Disallow: /api/
+Disallow: /_next/
+Disallow: /admin/
+Disallow: /.well-known/
+
+# Autoriser les assets statiques
+Allow: /assets/
+Allow: /images/
+Allow: /css/
+Allow: /js/
+
+# Sitemap
+Sitemap: https://yana.ebenewallace.com/sitemap.xml
+
+# Crawl-delay pour être respectueux
+Crawl-delay: 1
+
+# Instructions spécifiques pour les moteurs de recherche majeurs
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Slurp
+Allow: /
+Crawl-delay: 1

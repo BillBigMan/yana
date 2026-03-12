@@ -11,7 +11,15 @@ export function ProductShowcase() {
       <div className="container mx-auto px-12 md:px-24">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-4 uppercase tracking-tighter">
-            {locale === 'en' ? "Experience Y'ana" : "Découvrez Y'ana"}
+            {locale === 'en' ? (
+              <>
+                Experience <span className="text-primary">Y&apos;</span><span className="text-accent">ana</span>
+              </>
+            ) : (
+              <>
+                Découvrez <span className="text-primary">Y&apos;</span><span className="text-accent">ana</span>
+              </>
+            )}
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto font-medium">
             {locale === 'en' 
@@ -196,6 +204,26 @@ export function ProductShowcase() {
                       ? "Certified nanny with first-aid training. Specialized in child development and infant care." 
                       : "Nounou certifiée avec formation en secourisme. Spécialisée dans l'éveil des enfants."}
                   </p>
+                  
+                  {/* Verification Process */}
+                  <div className="space-y-2">
+                    <h4 className="text-[9px] font-black uppercase tracking-widest text-gray-400">{locale === 'en' ? "Verification" : "Vérification"}</h4>
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 className="w-2 h-2 text-green-500" />
+                        <span className="text-[7px] text-gray-600">{locale === 'en' ? "Physical interview completed" : "Entretien physique validé"}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 className="w-2 h-2 text-green-500" />
+                        <span className="text-[7px] text-gray-600">{locale === 'en' ? "Legal documents verified" : "Documents légaux vérifiés"}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 className="w-2 h-2 text-green-500" />
+                        <span className="text-[7px] text-gray-600">{locale === 'en' ? "Residence confirmed" : "Domicile confirmé"}</span>
+                      </div>
+                    </div>
+                  </div>
+                  
                   <div className="flex gap-2 mt-2">
                     <button className="text-[8px] text-blue-500 hover:underline cursor-pointer">
                       {locale === 'en' ? 'Terms' : 'Conditions'}

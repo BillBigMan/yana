@@ -1,10 +1,13 @@
-import { useState } from "react";
+"use client";
+
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Card } from "@/components/ui/Card";
 import { CheckCircle2, Loader2, Phone, XCircle } from "lucide-react";
 import { useTranslation } from "@/lib/TranslationContext";
 import { supabase } from "@/lib/supabase";
+import { useWaitlistAnalytics } from "@/hooks/useAnalytics";
 
 export function Waitlist() {
   const { t, locale } = useTranslation();
@@ -17,12 +20,78 @@ export function Waitlist() {
   });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [phoneError, setPhoneError] = useState<string>("");
+  
+  // Analytics tracking
+  const { trackWaitlistOpened, trackWaitlistSubmitted } = useWaitlistAnalytics();
+  
+  // Tracking à l'ouverture du formulaire
+  useEffect(() => {
+    trackWaitlistOpened();
+  }, []);
+
+  // Validation du numéro de téléphone camerounais
+  const validatePhone = (phone: string): boolean => {
+    // Remove all non-digit characters for validation
+    const cleanPhone = phone.replace(/\D/g, '');
+    
+    // Check if it starts with 237 and has exactly 12 digits total (+237 + 9 more)
+    if (cleanPhone.startsWith('237') && cleanPhone.length === 12) {
+      return true;
+    }
+    
+    return false;
+  };
+
+  const formatPhoneDisplay = (phone: string): string => {
+    const cleanPhone = phone.replace(/\D/g, '');
+    
+    if (cleanPhone.startsWith('237') && cleanPhone.length === 12) {
+      return `+${cleanPhone.slice(0, 3)} ${cleanPhone.slice(3, 6)} ${cleanPhone.slice(6, 9)} ${cleanPhone.slice(9)}`;
+    }
+    
+    return phone;
+  };
+
+  const formatPhoneInput = (value: string): string => {
+    // Remove all non-digit characters
+    let cleanValue = value.replace(/\D/g, '');
+    
+    // Always add 2376 prefix (Cameroon country code + mobile prefix)
+    if (!cleanValue.startsWith('2376')) {
+      cleanValue = '2376' + cleanValue.replace(/^2376?/, '');
+    }
+    
+    // Format with spaces in real-time
+    if (cleanValue.length >= 7) {
+      return `+${cleanValue.slice(0, 3)} ${cleanValue.slice(3, 6)} ${cleanValue.slice(6, 9)}${cleanValue.length > 9 ? ' ' + cleanValue.slice(9) : ''}`;
+    } else if (cleanValue.length >= 3) {
+      return `+${cleanValue.slice(0, 3)} ${cleanValue.slice(3)}`;
+    } else {
+      return `+${cleanValue}`;
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Valider le numéro de téléphone
+    if (!validatePhone(formData.phone)) {
+      setPhoneError(locale === 'en' 
+        ? "Please enter a complete phone number (+237 6XX XXX XXX)" 
+        : "Veuillez entrer un numéro de téléphone complet (+237 6XX XXX XXX)");
+      setStatus("error");
+      return;
+    }
+    
+    // Réinitialiser l'erreur de téléphone si valide
+    setPhoneError("");
     setStatus("loading");
 
     try {
+      // Format the phone number before saving
+      const formattedPhone = formatPhoneDisplay(formData.phone);
+      
       // Insert waitlist entry
       const { error: waitlistError } = await supabase
         .from('waitlist')
@@ -30,7 +99,7 @@ export function Waitlist() {
           {
             name: formData.name,
             email: formData.email,
-            phone: formData.phone,
+            phone: formattedPhone,
             city: formData.city,
             user_type: formData.userType
           }
@@ -62,6 +131,9 @@ export function Waitlist() {
 
       setStatus("success");
       setFormData({ name: "", email: "", phone: "", city: "", userType: "family" });
+      
+      // Tracking de la soumission réussie
+      trackWaitlistSubmitted(formData.city, formData.userType as 'family' | 'worker');
     } catch (error) {
       console.error('Submit error:', error);
       setErrorMessage(locale === 'en' 
@@ -74,6 +146,7 @@ export function Waitlist() {
   const resetForm = () => {
     setStatus("idle");
     setErrorMessage("");
+    setPhoneError("");
   };
 
   if (status === "success") {
@@ -129,14 +202,14 @@ export function Waitlist() {
           <div className="lg:w-1/2 w-full max-w-lg">
             <Card className="p-8 shadow-2xl border-0 bg-white">
               {/* Message d'erreur */}
-              {status === "error" && errorMessage && (
+              {status === "error" && (errorMessage || phoneError) && (
                 <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
                   <XCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
                   <div className="flex-1">
                     <p className="text-sm font-medium text-red-800">
                       {locale === 'en' ? 'Registration Error' : 'Erreur d\'inscription'}
                     </p>
-                    <p className="text-sm text-red-600 mt-1">{errorMessage}</p>
+                    <p className="text-sm text-red-600 mt-1">{errorMessage || phoneError}</p>
                   </div>
                 </div>
               )}
@@ -147,7 +220,7 @@ export function Waitlist() {
                     <label className="text-sm font-bold text-gray-900">{t.waitlist.form.name}</label>
                     <Input 
                       required 
-                      placeholder="Jane Doe" 
+                      placeholder="Prisca K." 
                       className="min-h-[44px] text-sm border-gray-200 focus:border-primary focus:ring-primary"
                       value={formData.name}
                       onChange={(e) => setFormData({...formData, name: e.target.value})}
@@ -158,7 +231,7 @@ export function Waitlist() {
                     <Input 
                       required 
                       type="email" 
-                      placeholder="jane@example.com"
+                      placeholder="prisca.k@example.com"
                       className="min-h-[44px] text-sm border-gray-200 focus:border-primary focus:ring-primary"
                       value={formData.email}
                       onChange={(e) => setFormData({...formData, email: e.target.value})}
@@ -173,18 +246,45 @@ export function Waitlist() {
                       <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                       <Input 
                         placeholder="+237 6XX XXX XXX"
-                        className="pl-10 min-h-[44px] text-sm"
-                        type="number"
-                        value={formData.phone}
-                        onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                        className={`pl-10 min-h-[44px] text-sm ${
+                          phoneError ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : 'border-gray-200 focus:border-primary focus:ring-primary'
+                        }`}
+                        type="tel"
+                        value={formatPhoneInput(formData.phone)}
+                        onChange={(e) => {
+                          // Get the current value and clean it
+                          let currentValue = e.target.value.replace(/\D/g, '');
+                          
+                          // Limit to maximum 12 digits total (since we'll add 2376 prefix)
+                          if (currentValue.length > 12) {
+                            currentValue = currentValue.slice(0, 12);
+                          }
+                          
+                          setFormData({...formData, phone: currentValue});
+                          // Clear phone error when user starts typing
+                          if (phoneError) setPhoneError("");
+                        }}
+                        onBlur={() => {
+                          if (formData.phone && !validatePhone(formData.phone)) {
+                            setPhoneError(locale === 'en' 
+                              ? "Please enter a complete phone number (+237 6XX XXX XXX)" 
+                              : "Veuillez entrer un numéro de téléphone complet (+237 6XX XXX XXX)");
+                          }
+                        }}
                       />
                     </div>
+                    {phoneError && (
+                      <p className="text-xs text-red-500 mt-1">{phoneError}</p>
+                    )}
+                    <p className="text-xs text-gray-500 mt-1">
+                      {locale === 'en' ? 'Format: +237 6XX XXX XXX' : 'Format : +237 6XX XXX XXX'}
+                    </p>
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-bold text-gray-700">{t.waitlist.form.city}</label>
                     <Input 
                       required 
-                      placeholder="e.g. Douala"
+                      placeholder="Douala"
                       className="min-h-[44px] text-sm"
                       value={formData.city}
                       onChange={(e) => setFormData({...formData, city: e.target.value})}

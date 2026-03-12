@@ -1,5 +1,6 @@
 import { CheckCircle2, ShieldCheck, MapPin, MessageSquare, Star, LucideIcon } from "lucide-react";
 import { useTranslation } from "@/lib/TranslationContext";
+import { Button } from "@/components/ui/Button";
 
 export function Solution() {
   const { t } = useTranslation();
@@ -11,6 +12,7 @@ export function Solution() {
     title: string;
     description: string;
     features: string[];
+    cta: string;
     items: { title: string; description: string; }[];
   };
 
@@ -35,6 +37,14 @@ export function Solution() {
                 </div>
               ))}
             </div>
+            
+            <Button
+              size="lg"
+              className="bg-gradient-to-r from-accent to-orange-500 hover:from-orange-600 hover:to-orange-500 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 px-8 mt-8 w-full"
+              onClick={() => document.getElementById('waitlist')?.scrollIntoView({ behavior: 'smooth' })}
+            >
+              {solution.cta}
+            </Button>
           </div>
           
           <div className="lg:w-1/2 grid sm:grid-cols-2 gap-6">

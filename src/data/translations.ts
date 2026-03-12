@@ -8,7 +8,8 @@ export const translations = {
       problem: "Problem",
       solution: "Solution",
       howItWorks: "How it works",
-      joinWaitlist: "Join Waitlist",
+      faq: "FAQ",
+      joinWaitlist: "Sign Up",
     },
     hero: {
       badge: "Coming soon throughout Cameroon",
@@ -50,10 +51,11 @@ export const translations = {
       title: "Your home staff, with complete confidence.",
       description: "Y'ana connects Cameroonian families with verified workers. Simple, secure, and built for our reality.",
       features: ["Verified Profiles", "1-Click Booking", "Secure Payments"],
+      cta: "Get the Solution",
       items: [
         {
           title: "100% Verified Profiles",
-          description: "ID and address checked. Thorough background checks performed. Access to references and verified reviews."
+          description: "Physical interview with domain experts, legal document verification (criminal record, National ID), and in-person residence verification to confirm the worker's actual address."
         },
         {
           title: "Find in Minutes",
@@ -90,7 +92,7 @@ export const translations = {
       }
     },
     survey: {
-      title: "Help Us Build Y'ana",
+      title: "Help Us Build <span class=\"text-primary\">Y&apos;</span><span class=\"text-accent\">ana</span>",
       subtitle: "Share your experience to help us fix the domestic work market in Cameroon.",
       thankYou: "Thank you very much!",
       thankYouSub: "Your feedback is essential for building a safer platform in our country.",
@@ -99,7 +101,7 @@ export const translations = {
       errorSub: "Please try again or contact support",
       tryAgain: "Try Again",
       anotherSurvey: "Take Another Survey",
-      joinWaitlist: "Join Waitlist",
+      joinWaitlist: "Sign Up",
       whoAreYou: "Who are you?",
       imLookingForHelp: "I am looking for a worker (employer)",
       imLookingForAJob: "I am looking for work (professional)",
@@ -137,6 +139,11 @@ export const translations = {
           id: "fee",
           question: "Would you pay a small fee to access verified and rated profiles?",
           options: ["Yes", "Only if background is 100% verified", "No"]
+        },
+        {
+          id: "priorities",
+          question: "What's most important when choosing domestic help?",
+          options: ["Trust and safety", "Experience and skills", "Price and affordability", "Availability and flexibility"]
         }
       ],
       worker: [
@@ -164,6 +171,11 @@ export const translations = {
           id: "profile",
           question: "Would you provide your ID to be 'Verified' and get more jobs?",
           options: ["Yes, no problem", "Only if I trust the platform", "No"]
+        },
+        {
+          id: "challenges",
+          question: "What's your biggest challenge as a domestic worker?",
+          options: ["Finding reliable employers", "Getting paid on time", "Lack of job security", "Transportation and logistics"]
         }
       ]
     },
@@ -186,7 +198,7 @@ export const translations = {
         city: "Your City",
         iam: "I am a...",
         options: ["Family / Homeowner", "Domestic Worker"],
-        submit: "Join the Waitlist",
+        submit: "Sign Up",
         joining: "Joining...",
         terms: "By joining, you agree to our terms and will receive launch updates."
       }
@@ -194,6 +206,36 @@ export const translations = {
     footer: {
       text: "© 2024 Y'ana. Built for market validation. Inspired by the need for trust.",
       links: ["Privacy", "Terms", "Contact"]
+    },
+    faq: {
+      title: "Frequently Asked Questions",
+      subtitle: "Quick answers to the most common questions.",
+      questions: [
+        {
+          question: "How do you verify worker credibility?",
+          answer: "Every worker profile is verified through:\n<span class='text-accent font-bold'>1)</span> Physical interview with domain experts\n<span class='text-accent font-bold'>2)</span> Legal document verification (Criminal record check, National ID)\n<span class='text-accent font-bold'>3)</span> In-person residence verification to confirm the worker's actual living address."
+        },
+        {
+          question: "Can I choose the worker myself?",
+          answer: "Yes. You can review profiles, ratings and experience before choosing."
+        },
+        {
+          question: "What services are available on Y'ana?",
+          answer: "Nannies, cleaners, babysitters and home helpers near you."
+        },
+        {
+          question: "Will the service be available in my city?",
+          answer: "Y'ana will launch progressively in several cities across Cameroon."
+        },
+        {
+          question: "How can I become an early user?",
+          answer: "Simply join the waitlist."
+        }
+      ],
+      cta: {
+        title: "Be among the first to use <span class=\"text-primary\">Y&apos;</span><span class=\"text-accent\">ana</span>",
+        button: "Join the waitlist"
+      }
     }
   },
   fr: {
@@ -205,7 +247,8 @@ export const translations = {
       problem: "Problème",
       solution: "Solution",
       howItWorks: "Fonctionnement",
-      joinWaitlist: "Liste d'attente",
+      faq: "FAQ",
+      joinWaitlist: "S'inscrire",
     },
     hero: {
       badge: "Bientôt disponible partout au Cameroun",
@@ -247,10 +290,11 @@ export const translations = {
       title: "Votre personnel de maison, en toute confiance.",
       description: "Y'ana connecte les familles camerounaises avec des travailleurs vérifiés. Simple, sûr, et adapté à nos réalités.",
       features: ["Profils Vérifiés", "Réservation en 1clic", "Paiement Sécurisé"],
+      cta: "Profiter de la solution",
       items: [
         {
           title: "Profils 100% Vérifiés",
-          description: "CNI et domicile contrôlés. Tests de moralité poussés effectués. Accès aux références et avis vérifiés."
+          description: "Entretien physique avec des experts du domaine, vérification des documents légaux (casier judiciaire, CNI), et visite du lieu de résidence pour confirmer l'adresse réelle du travailleur."
         },
         {
           title: "Trouvez en Minutes",
@@ -287,7 +331,7 @@ export const translations = {
       }
     },
     survey: {
-      title: "Aidez-nous à bâtir Y'ana",
+      title: "Aidez-nous à bâtir <span class=\"text-primary\">Y&apos;</span><span class=\"text-accent\">ana</span>",
       subtitle: "Partagez votre expérience pour nous aider à assainir le secteur au Cameroun.",
       thankYou: "Merci beaucoup !",
       thankYouSub: "Vos réponses sont précieuses pour construire une plateforme sûre pour notre pays.",
@@ -296,7 +340,7 @@ export const translations = {
       errorSub: "Veuillez réessayer ou contacter le support",
       tryAgain: "Réessayer",
       anotherSurvey: "Faire un autre sondage",
-      joinWaitlist: "Liste d'attente",
+      joinWaitlist: "S'inscrire",
       whoAreYou: "Qui êtes-vous ?",
       imLookingForHelp: "Je cherche du personnel (employeur)",
       imLookingForAJob: "Je cherche du travail (professionnel)",
@@ -334,6 +378,11 @@ export const translations = {
           id: "fee",
           question: "Paieriez-vous un petit montant pour accéder à des profils vérifiés et notés ?",
           options: ["Oui", "Seulement si la vérification est garantie à 100%", "Non"]
+        },
+        {
+          id: "priorities",
+          question: "Qu'est-ce qui compte le plus dans le choix d'une aide à domicile ?",
+          options: ["La confiance et la sécurité", "L'expérience et les compétences", "Le prix et l'abordabilité", "La disponibilité et la flexibilité"]
         }
       ],
       worker: [
@@ -361,6 +410,11 @@ export const translations = {
           id: "profile",
           question: "Accepteriez-vous de donner votre CNI pour être 'Vérifié' et avoir plus de jobs ?",
           options: ["Oui, sans problème", "Seulement si j'ai confiance en l'appli", "Non"]
+        },
+        {
+          id: "challenges",
+          question: "Quel est votre plus grand défi comme travailleur domestique ?",
+          options: ["Trouver des employeurs fiables", "Être payé à temps", "Manque de sécurité d'emploi", "Problèmes de transport"]
         }
       ]
     },
@@ -383,7 +437,7 @@ export const translations = {
         city: "Votre ville",
         iam: "Je suis...",
         options: ["Famille / Propriétaire", "Travailleur domestique"],
-        submit: "Rejoindre la liste d'attente",
+        submit: "S'inscrire",
         joining: "Inscription...",
         terms: "En rejoignant, vous acceptez nos conditions et recevrez nos actualités."
       }
@@ -391,6 +445,36 @@ export const translations = {
     footer: {
       text: "© 2024 Y'ana. Créé pour la validation du marché. Inspiré par le besoin de confiance.",
       links: ["Confidentialité", "Conditions", "Contact"]
+    },
+    faq: {
+      title: "Questions fréquentes",
+      subtitle: "Les réponses rapides aux questions les plus importantes.",
+      questions: [
+        {
+          question: "Comment vérifiez-vous la crédibilité des travailleurs ?",
+          answer: "Chaque profil est vérifié via :\n<span class='text-accent font-bold'>1)</span> Entretien physique avec des experts du domaine\n<span class='text-accent font-bold'>2)</span> Vérification des documents légaux (Casier judiciaire, CNI)\n<span class='text-accent font-bold'>3)</span> Visite du lieu de résidence effective pour confirmer l'adresse réelle du travailleur."
+        },
+        {
+          question: "Puis-je choisir moi-même la personne qui viendra chez moi ?",
+          answer: "Oui. Vous pouvez consulter les profils, les avis et l'expérience avant de décider."
+        },
+        {
+          question: "Quels services sont disponibles sur Y'ana ?",
+          answer: "Nounous, femmes de ménage, babysitters et aides à domicile près de chez vous."
+        },
+        {
+          question: "Le service sera-t-il disponible dans ma ville ?",
+          answer: "Y'ana sera lancé progressivement dans plusieurs villes du Cameroun."
+        },
+        {
+          question: "Comment faire partie des premiers utilisateurs ?",
+          answer: "Inscrivez-vous simplement sur la liste d'attente."
+        }
+      ],
+      cta: {
+        title: "Soyez parmi les premiers à utiliser <span class=\"text-primary\">Y&apos;</span><span class=\"text-accent\">ana</span>",
+        button: "Rejoindre la liste d'attente"
+      }
     }
   }
 };

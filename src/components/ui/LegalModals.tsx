@@ -477,9 +477,12 @@ export function LegalModals() {
           >
             {locale === 'en' ? 'Terms' : 'Conditions'}
           </button>
-          <a href="#contact" className="hover:text-red-600 cursor-pointer">
+          <button 
+            onClick={() => document.getElementById('waitlist')?.scrollIntoView({ behavior: 'smooth' })}
+            className="hover:text-red-600 transition-colors cursor-pointer"
+          >
             {locale === 'en' ? 'Contact' : 'Contact'}
-          </a>
+          </button>
         </div>
       </>
     );
@@ -517,9 +520,12 @@ export function LegalModals() {
         >
           {locale === 'en' ? 'Terms' : 'Conditions'}
         </button>
-        <a href="#contact" className="hover:text-gray-600 cursor-pointer">
+        <button 
+          onClick={() => document.getElementById('waitlist')?.scrollIntoView({ behavior: 'smooth' })}
+          className="hover:text-gray-600 transition-colors cursor-pointer"
+        >
           {locale === 'en' ? 'Contact' : 'Contact'}
-        </a>
+        </button>
       </div>
     </>
   );

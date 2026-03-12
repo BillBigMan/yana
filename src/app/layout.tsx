@@ -58,8 +58,8 @@ export default function RootLayout({
                 "@type": "Organization",
                 "name": "Y'ana",
                 "description": "Plateforme connectant les familles camerounaises avec des nounous, babysitters et aides ménagères vérifiées.",
-                "url": "https://yana.cm",
-                "logo": "https://yana.cm/logo.png",
+                "url": "https://yana.ebenewallace.com",
+                "logo": "https://yana.ebenewallace.com/logo.png",
                 "areaServed": "Cameroon",
                 "sameAs": []
               },
@@ -67,11 +67,11 @@ export default function RootLayout({
                 "@context": "https://schema.org",
                 "@type": "WebSite",
                 "name": "Y'ana",
-                "url": "https://yana.cm",
+                "url": "https://yana.ebenewallace.com",
                 "description": "Trouvez une aide domestique de confiance au Cameroun avec Y'ana.",
                 "potentialAction": {
                   "@type": "SearchAction",
-                  "target": "https://yana.cm/search?q={search_term_string}",
+                  "target": "https://yana.ebenewallace.com/search?q={search_term_string}",
                   "query-input": "required name=search_term_string"
                 }
               },

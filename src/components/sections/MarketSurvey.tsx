@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/Card";
 import { CheckCircle2, ArrowRight, ArrowLeft, Loader2, XCircle } from "lucide-react";
 import { useTranslation } from "@/lib/TranslationContext";
 import { supabase } from "@/lib/supabase";
+import { useMarketSurveyAnalytics } from "@/hooks/useAnalytics";
 
 type UserType = "family" | "worker" | null;
 
@@ -13,22 +14,35 @@ interface CustomSurveyEvent extends Event {
 }
 
 export function MarketSurvey() {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const [userType, setUserType] = useState<UserType>(null);
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [userFeedback, setUserFeedback] = useState('');
   const [isCompleted, setIsCompleted] = useState(false);
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  type StatusType = 'idle' | 'loading' | 'success' | 'error';
+  
+  const [status, setStatus] = useState<StatusType>('idle');
+
+  const isLoading = status === 'loading';
+
+  // Analytics tracking
+  const { trackUserTypeInterest, trackSurveyCompleted } = useMarketSurveyAnalytics();
 
   useEffect(() => {
     const handleSetType = (e: Event) => {
       const customEvent = e as CustomSurveyEvent;
       setUserType(customEvent.detail);
       setStep(1);
+      
+      // Tracking de l'intention utilisateur
+      if (customEvent.detail) {
+        trackUserTypeInterest(customEvent.detail);
+      }
     };
     window.addEventListener('setSurveyType', handleSetType);
     return () => window.removeEventListener('setSurveyType', handleSetType);
-  }, []);
+  }, [trackUserTypeInterest]);
 
   const questions = userType === "family" ? t.survey.family : t.survey.worker;
   const currentQuestion = questions[step - 1];
@@ -40,74 +54,87 @@ export function MarketSurvey() {
     if (step < questions.length) {
       setStep(step + 1);
     } else {
-        // Show loading state
-        setStatus('loading');
+      // Move to feedback step
+      setStep(questions.length + 1);
+    }
+  };
+
+  const handleSubmitSurvey = async () => {
+    setStatus('loading');
+    
+    // Parse budget properly
+    const parseBudget = (budgetStr: string): number | null => {
+      if (!budgetStr) return null;
+      const parts = budgetStr.split(' - ');
+      if (parts.length === 2) {
+        const min = parseInt(parts[0].replace(/\D/g, ''));
+        const max = parseInt(parts[1].replace(/\D/g, ''));
+        return Math.floor((min + max) / 2);
+      } else {
+        return parseInt(budgetStr.replace(/\D/g, ''));
+      }
+    };
+
+    // Parse trust to number or null
+    const parseTrust = (trustStr: string): number | null => {
+      if (!trustStr) return null;
+      const num = parseInt(trustStr.replace(/[^0-9]/g, ''));
+      return isNaN(num) ? null : num;
+    };
+
+    try {
+      // Save to Supabase
+      const surveyData = {
+        user_type: userType,
+        // Colonnes directes du questionnaire
+        budget: answers.budget,
+        discovery: answers.discovery,
+        fee: answers.fee,
+        frequency: answers.frequency,
+        services: answers.services,
+        trust: answers.trust,
+        priorities: answers.priorities,
+        challenges: answers.challenges,
+        feedback: userFeedback,
+        // Colonnes optionnelles pour compatibilité future
+        current_method: answers.discovery || answers.services,
+        verification_trust: parseTrust(answers.trust),
+        monthly_budget: parseBudget(answers.budget),
+        expected_salary: parseBudget(answers.expected_salary),
+        availability: answers.frequency,
+        location: answers.discovery,
+        created_at: new Date().toISOString()
+      };
+
+      const { error } = await supabase
+        .from('market_surveys')
+        .insert([surveyData]);
         
-        // Parse budget properly
-        const parseBudget = (budgetStr: string): number | null => {
-          if (!budgetStr) return null;
-          const parts = budgetStr.split(' - ');
-          if (parts.length === 2) {
-            const min = parseInt(parts[0].replace(/\D/g, ''));
-            const max = parseInt(parts[1].replace(/\D/g, ''));
-            return Math.floor((min + max) / 2);
-          } else {
-            return parseInt(budgetStr.replace(/\D/g, ''));
-          }
-        };
-
-        // Parse trust to number or null
-        const parseTrust = (trustStr: string): number | null => {
-          if (!trustStr) return null;
-          const num = parseInt(trustStr.replace(/[^0-9]/g, ''));
-          return isNaN(num) ? null : num;
-        };
-
-        // Save to Supabase
-        const surveyData = {
-            user_type: userType,
-            // Colonnes directes du questionnaire
-            budget: newAnswers.budget,
-            discovery: newAnswers.discovery,
-            fee: newAnswers.fee,
-            frequency: newAnswers.frequency,
-            services: newAnswers.services,
-            trust: newAnswers.trust,
-            // Colonnes optionnelles pour compatibilité future
-            current_method: newAnswers.discovery || newAnswers.services,
-            verification_trust: parseTrust(newAnswers.trust),
-            monthly_budget: parseBudget(newAnswers.budget),
-            expected_salary: parseBudget(newAnswers.expected_salary),
-            availability: newAnswers.frequency,
-            location: newAnswers.discovery,
-            created_at: new Date().toISOString()
-        };
-
-        try {
-            const { error } = await supabase
-                .from('market_surveys')
-                .insert([surveyData]);
-                
-            if (error) {
-                console.error('Survey save error:', error);
-                console.error('Survey data:', surveyData);
-                setStatus('error');
-                // Continue to completion even if save fails
-            } else {
-                console.log('Survey saved successfully');
-                setStatus('success');
-            }
-            
-            // Show completion message
-            setIsCompleted(true);
-            // Scroll to waitlist after completion
-            setTimeout(() => {
-                document.getElementById('waitlist')?.scrollIntoView({ behavior: 'smooth' });
-            }, 500);
-        } catch (error) {
-            console.error('Survey submission error:', error);
-            setStatus('error');
-        }
+      if (error) {
+        console.error('Survey save error:', error);
+        console.error('Survey data:', surveyData);
+        setStatus('error');
+        // Continue to completion even if save fails
+      } else {
+        console.log('Survey saved successfully');
+        setStatus('success');
+      }
+      
+      // Show completion message
+      setIsCompleted(true);
+      
+      // Tracking de la complétion du sondage
+      if (status === 'success') {
+        trackSurveyCompleted();
+      }
+      
+      // Scroll to waitlist after completion
+      setTimeout(() => {
+        document.getElementById('waitlist')?.scrollIntoView({ behavior: 'smooth' });
+      }, 500);
+    } catch (error) {
+      console.error('Survey submission error:', error);
+      setStatus('error');
     }
   };
 
@@ -162,7 +189,7 @@ export function MarketSurvey() {
     <section id="market-survey" className="py-24 bg-white scroll-mt-20">
       <div className="container mx-auto px-12 md:px-24 max-w-5xl">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t.survey.title}</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4" dangerouslySetInnerHTML={{ __html: t.survey.title }}></h2>
           <p className="text-gray-600">{t.survey.subtitle}</p>
         </div>
 
@@ -201,12 +228,56 @@ export function MarketSurvey() {
                   </button>
                 </div>
             </div>
-          ) : status === 'loading' ? (
+          ) : isLoading ? (
             <div className="flex flex-col items-center justify-center py-12">
               <Loader2 className="w-8 h-8 animate-spin text-primary" />
               <p className="text-lg text-gray-600 mt-4">
                 {t.survey.loading || "Submitting your responses..."}
               </p>
+            </div>
+          ) : step === questions.length + 1 ? (
+            <div className="animate-in fade-in slide-in-from-right-4 duration-500">
+                <button 
+                    onClick={() => setStep(step - 1)}
+                    className="absolute top-6 left-6 text-gray-400 hover:text-gray-600 flex items-center gap-1 text-sm transition-colors cursor-pointer"
+                >
+                    <ArrowLeft className="w-4 h-4" /> {t.survey.back}
+                </button>
+                
+                <div className="pt-8 px-6">
+                    <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                        {locale === 'en' ? 'Any additional thoughts?' : 'Des commentaires supplémentaires ?'}
+                    </h3>
+                    <p className="text-gray-600 mb-6">
+                        {locale === 'en' 
+                            ? 'Share any ideas, concerns, or suggestions you have about domestic services in Cameroon.'
+                            : 'Partagez vos idées, préoccupations ou suggestions sur les services domestiques au Cameroun.'}
+                    </p>
+                    
+                    <textarea
+                        value={userFeedback}
+                        onChange={(e) => setUserFeedback(e.target.value)}
+                        placeholder={locale === 'en' 
+                            ? 'Your feedback helps us build a better platform...'
+                            : 'Vos commentaires nous aident à construire une meilleure plateforme...'}
+                        className="w-full h-32 p-4 border border-gray-200 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    />
+                    
+                    <div className="flex justify-between items-center mt-6">
+                        <span className="text-sm text-gray-500">
+                            {locale === 'en' ? 'Optional' : 'Optionnel'}
+                        </span>
+                        <button
+                            onClick={handleSubmitSurvey}
+                            className="px-8 py-3 bg-primary text-white rounded-xl hover:bg-blue-700 transition-colors font-medium active:scale-[0.98] cursor-pointer"
+                        >
+                            {isLoading 
+                                ? (t.survey.loading || 'Submitting...')
+                                : (locale === 'en' ? 'Submit Survey' : 'Envoyer le sondage')
+                            }
+                        </button>
+                    </div>
+                </div>
             </div>
           ) : (
             <div className="animate-in fade-in slide-in-from-right-4 duration-500">

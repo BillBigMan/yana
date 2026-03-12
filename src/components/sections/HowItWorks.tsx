@@ -1,5 +1,6 @@
 import { Search, MessageSquare, CheckCircle, UserPlus, Eye, Handshake, LucideIcon } from "lucide-react";
 import { useTranslation } from "@/lib/TranslationContext";
+import { Button } from "@/components/ui/Button";
 
 export function HowItWorks() {
   const { t } = useTranslation();
@@ -51,6 +52,17 @@ export function HowItWorks() {
               ))}
             </div>
           </div>
+        </div>
+        
+        {/* CTA Button */}
+        <div className="mt-20 text-center">
+          <Button
+            size="lg"
+            className="bg-gradient-to-r from-accent to-orange-500 hover:from-orange-600 hover:to-orange-500 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 px-8 w-full max-w-md mx-auto"
+            onClick={() => document.getElementById('waitlist')?.scrollIntoView({ behavior: 'smooth' })}
+          >
+            Je veux tester maintenant
+          </Button>
         </div>
       </div>
     </section>

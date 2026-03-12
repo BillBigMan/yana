@@ -1,27 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" 
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <!-- Page d'accueil principale -->
   <url>
-    <loc>https://yana.cm/</loc>
-    <lastmod>2024-12-10</lastmod>
+    <loc>https://yana.ebenewallace.com/</loc>
+    <lastmod>2026-03-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://yana.ebenewallace.com/?lang=fr" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://yana.ebenewallace.com/?lang=en" />
   </url>
+
+  <!-- Version française -->
   <url>
-    <loc>https://yana.cm/nounou-yaounde</loc>
-    <lastmod>2024-12-10</lastmod>
+    <loc>https://yana.ebenewallace.com/?lang=fr</loc>
+    <lastmod>2026-03-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Version anglaise -->
+  <url>
+    <loc>https://yana.ebenewallace.com/?lang=en</loc>
+    <lastmod>2026-03-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Sections existantes de la page one-page -->
+  <url>
+    <loc>https://yana.ebenewallace.com/#solution</loc>
+    <lastmod>2026-03-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+
   <url>
-    <loc>https://yana.cm/aide-menagere-douala</loc>
-    <lastmod>2024-12-10</lastmod>
+    <loc>https://yana.ebenewallace.com/#how-it-works</loc>
+    <lastmod>2026-03-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+
   <url>
-    <loc>https://yana.cm/babysitter-cameroun</loc>
-    <lastmod>2024-12-10</lastmod>
+    <loc>https://yana.ebenewallace.com/#market-survey</loc>
+    <lastmod>2026-03-12</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
+
+  <url>
+    <loc>https://yana.ebenewallace.com/#waitlist</loc>
+    <lastmod>2026-03-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://yana.ebenewallace.com/#faq</loc>
+    <lastmod>2026-03-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
 </urlset>
