@@ -35,7 +35,7 @@ Y'ana is an innovative platform connecting families with domestic service profes
 - **Frontend**: Next.js 16, React 19, TypeScript
 - **Styling**: TailwindCSS, Framer Motion
 - **Analytics**: PostHog (advanced tracking)
-- **Deployment**: Vercel
+- **Deployment**: Hostinger
 - **Image Optimization**: Sharp, Imagemin (93.6% compression)
 
 ## 📱 Multilingue / Multilingual
